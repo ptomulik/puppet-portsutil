@@ -1,0 +1,29 @@
+.pkg
+Gemfile.lock
+vendor
+pkg
+# Ignore all from spec/fixtures but leave our fixtures in repository
+spec/fixtures/*
+!spec/fixtures/unit/
+spec/fixtures/unit/*
+!spec/fixtures/unit/puppet/
+spec/fixtures/unit/puppet/*
+!spec/fixtures/unit/puppet/util/ptomulik/
+spec/fixtures/unit/puppet/util/ptomulik/*
+!spec/fixtures/unit/puppet/util/ptomulik/
+spec/fixtures/unit/puppet/util/ptomulik/*
+!spec/fixtures/unit/puppet/util/ptomulik/package/
+spec/fixtures/unit/puppet/util/ptomulik/package/*
+!spec/fixtures/unit/puppet/util/ptomulik/package/ports
+spec/lib
+.rspec_system
+.bundle
+# Editor junk
+*.swp
+*.bkp
+*.bak
+*~
+.tmp/
+.yardoc/
+doc/
+coverage/

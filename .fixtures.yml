@@ -1,0 +1,5 @@
+fixtures:
+  repositories:
+    vash: "git://github.com/ptomulik/puppet-vash.git"
+  symlinks:
+    portsutil: "#{source_dir}"
