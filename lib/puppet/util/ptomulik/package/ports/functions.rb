@@ -315,7 +315,7 @@ module Functions
       ::Puppet.debug "'#{pkg}' command found, checking whether pkgng is active"
       env = { 'TMPDIR' => '/dev/null', 'ASSUME_ALWAYS_YES' => '1',
               'PACKAGESITE' => 'file:///nonexistent' }
-      Puppet::Util::PTomulik.withenv(env) do 
+      Puppet::Util.withenv(env) do 
         begin
           # this is technique proposed by pkg(8) man page,
           cmd = [pkg,'info','-x',"'pkg(-devel)?$'",'>/dev/null', '2>&1']
