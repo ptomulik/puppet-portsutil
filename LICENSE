@@ -1,4 +1,4 @@
-Package - puppet package resource with extensions.
+Portsutil - puppet utility module for FreeBSD ports
 
 Copyright (C) 2013-2014 Paweł Tomulik <ptomulik@meil.pw.edu.pl>.
 
