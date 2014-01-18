@@ -351,7 +351,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       before(:each) do
         FileTest.stubs(:file?).with(pkg).returns(true)
         FileTest.stubs(:executable?).with(pkg).returns(true)
-        Puppet::Util::PTomulik.stubs(:withenv).once.with(env).yields
+        Puppet::Util.stubs(:withenv).once.with(env).yields
         Puppet::Util::Execution.stubs(:execpipe).once.with(cmd).raises(Puppet::ExecutionFailure,"")
       end
       let(:pkg) { pkg }
@@ -371,7 +371,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       before(:each) do
         FileTest.stubs(:file?).with(pkg).returns(true)
         FileTest.stubs(:executable?).with(pkg).returns(true)
-        Puppet::Util::PTomulik.stubs(:withenv).once.with(env).yields
+        Puppet::Util.stubs(:withenv).once.with(env).yields
         Puppet::Util::Execution.stubs(:execpipe).once.with(cmd).yields('')
       end
       let(:pkg) { pkg }
