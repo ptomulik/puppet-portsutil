@@ -30,9 +30,9 @@ with `make config`) and determining other characteristics of FreeBSD packaging
 system.
 
 The library is developed primarily for
-[ptomulik-package\_ports](https://github.com/ptomulik/puppet-package_ports)
+[ptomulik-portsng](https://github.com/ptomulik/puppet-portsng)
 module, which implements [ports](https://www.freebsd.org/ports/) provider for
-[package](https://github.com/ptomulik/puppet-package) resource.
+package resource.
 
 ## Module Description
 
