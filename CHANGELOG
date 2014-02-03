@@ -1,3 +1,5 @@
+2013-02-03 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * changed yardoc config to use github flavored markdown
 2014-01-19 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
   * release 0.0.3
   * fixed some links in README.md
