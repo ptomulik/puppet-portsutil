@@ -5,7 +5,7 @@ require 'puppet/util/ptomulik/package/ports/options'
 describe Puppet::Util::PTomulik::Package::Ports::Options do
   # valid option names and values
   describe "#[]= and #[]" do
-    [['FOO',:FOO],[:BAR,:BAR]].each do |key,munged_key|
+    [['FOO',:FOO],[:BAR,:BAR], ['0FOO', :"0FOO"]].each do |key,munged_key|
       let(:key) { key }
       let(:munged_key) { munged_key }
       [ ['on',  true],
@@ -30,7 +30,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
     end
 
     # invalid option names
-    ['','0FOO','&^$'].each do |key|
+    ['','&^$'].each do |key|
       context "#[#{key.inspect}]=true" do
         let(:key) { key }
         let(:val) { true }
