@@ -51,7 +51,7 @@ module Puppet::Util::PTomulik::Package::Ports
     # @return [Boolean] `true` if `x` is a valid option name, `false` if not.
     def self.option_name?(x)
       x = x.to_s if x.is_a?(Symbol)
-      x.is_a?(String) and x =~ /^[0-9a-zA-Z_]\w*$/
+      x.is_a?(String) and x =~ /^\w+$/
     end
 
     # Is x valid as option value?
