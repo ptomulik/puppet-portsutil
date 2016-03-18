@@ -4,23 +4,23 @@ require 'puppet/util/ptomulik/package/ports/pkg_record'
 
 describe Puppet::Util::PTomulik::Package::Ports::PkgRecord do
 
-#  it { described_class.should be_a Puppet::Util::PTomulik::Package::Ports::Functions }
-  it { described_class.should < Puppet::Util::PTomulik::Package::Ports::Record }
+#  specify { expect(described_class).to be_a Puppet::Util::PTomulik::Package::Ports::Functions }
+  specify { expect(described_class).to be < Puppet::Util::PTomulik::Package::Ports::Record }
 
   describe "::std_fields" do
-    it do
-      described_class.std_fields.sort.should == [
+    specify do
+      expect(described_class.std_fields.sort).to eq([
         :pkgname,
         :portinfo,
         :portorigin,
         :portstatus
-      ]
+      ])
     end
   end
 
   describe "::default_fields" do
-    it do
-      described_class.default_fields.sort.should == [
+    specify do
+      expect(described_class.default_fields.sort).to eq([
         :options,
         :options_file,
         :options_files,
@@ -30,7 +30,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgRecord do
         :portname,
         :portorigin,
         :portstatus
-      ]
+      ])
     end
   end
 
@@ -41,7 +41,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgRecord do
       [:options_files, [:portname, :portorigin]],
       [:pkgversion, [:pkgname]],
     ].each do |field, deps|
-      it { described_class.deps_for_amend[field].should == deps}
+      specify { expect(described_class.deps_for_amend[field]).to eq deps}
     end
   end
 
@@ -64,10 +64,10 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgRecord do
         context "#amend!(#{fields.inspect})" do
           let(:fields) { fields }
           let(:result) { result }
-          it "changes self to #{result.inspect}" do
+          specify "changes self to #{result.inspect}" do
             s = subject
             s.amend!(fields)
-            s.should == result
+            expect(s).to eq result
           end
         end
       end

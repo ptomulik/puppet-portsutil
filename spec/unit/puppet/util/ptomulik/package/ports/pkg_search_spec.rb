@@ -25,7 +25,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
 
   version_pattern = '[a-zA-Z0-9][a-zA-Z0-9\\.,_]*'
 
-  it { test_class.should be_a Puppet::Util::PTomulik::Package::Ports::Functions }
+  specify { expect(test_class).to be_a Puppet::Util::PTomulik::Package::Ports::Functions }
 
   describe "#search_packages(names,fields=PkgRecord.default_fields,options={})" do
     [
@@ -154,7 +154,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
         let(:out2) { output.collect { |o| [o[1..3]] } }
         let(:out3) { output.collect { |o| [[o[1]]] } }
         let(:result) { result }
-        it {
+        specify {
           args = names  ? test_class.sort_names_for_portversion(names) : []
           test_class.stubs(:execute_portversion).with(%w{-v -F} + args, options).
             multiple_yields(*out1)
@@ -329,7 +329,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           test_class.stubs(:command).with(:portversion).
             returns('/usr/local/sbin/portversion')
         end
-        it do
+        specify do
           cmds.each do |cmd,output|
             Puppet::Util::Execution.stubs(:execpipe).with(cmd).yields(output)
           end
@@ -371,7 +371,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
       context "#sort_names_for_portversion(#{names.inspect})" do
         let(:names) {names}
         let(:result) { result }
-        it { test_class.sort_names_for_portversion(names).should == result }
+        specify { expect(test_class.sort_names_for_portversion(names)).to eq result }
       end
     end
   end
@@ -412,7 +412,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
         let(:cmd) { cmd }
         let(:output) { output }
         let(:result) { result }
-        it do
+        specify do
           Puppet::Util::Execution.stubs(:execpipe).with(cmd).
             multiple_yields(*output)
           expect { |b|

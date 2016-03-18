@@ -23,7 +23,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
 
   version_pattern = '[a-zA-Z0-9][a-zA-Z0-9\\.,_]*'
 
-  it { test_class.should be_a Puppet::Util::PTomulik::Package::Ports::Functions }
+  specify { expect(test_class).to be_a Puppet::Util::PTomulik::Package::Ports::Functions }
 
   describe "#search_ports(names,fields=PORT_SEARCH_FIELDS,options={})" do
     existing_ports = [
@@ -104,7 +104,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
         let(:fields) { fields }
         let(:result) { result }
         let(:existing_ports) { existing_ports }
-        it do
+        specify do
 
           if (not names.is_a?(Enumerable)) or names.instance_of?(String)
             names = [names]
@@ -320,7 +320,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
         let(:pattern) { pattern }
         let(:output) { output }
         let(:result) { result }
-        it do
+        specify do
           names = [names] if names.instance_of?(String)
           output = output.collect {|o| [o]} # needed by multiple_yields
           test_class.stubs(:execute_make_search).with(search_key,pattern,fields,{}).
@@ -336,7 +336,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
   describe "#execute_make_search(key,pattern,fields=PORT_SEARCH_FIELDS,options={})" do
     context "#execute_make_search(:baz,'foo')" do
       before(:each) { Puppet::Util::Execution.stubs(:execpipe) }
-      it do
+      specify do
         expect {
           test_class.execute_make_search(:baz,'foo')
         }.to raise_error ArgumentError, "Invalid search key baz"
@@ -408,7 +408,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
         let(:fields) { fields }
         let(:output) { output }
         let(:result) { result }
-        it do
+        specify do
           record_class = Puppet::Util::PTomulik::Package::Ports::PortRecord
           search_fields = record_class.determine_search_fields(fields,key)
           cmd = test_class.make_search_command(key, pattern,search_fields,{})

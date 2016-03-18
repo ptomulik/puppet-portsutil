@@ -14,10 +14,10 @@ describe Puppet::Util::PTomulik::Package::Ports do
     end
   end
 
-  it do
-    described_class.should include Puppet::Util::PTomulik::Package::Ports::PortSearch
+  specify do
+    expect(described_class).to include Puppet::Util::PTomulik::Package::Ports::PortSearch
   end
-  it do
-    described_class.should include Puppet::Util::PTomulik::Package::Ports::PkgSearch
+  specify do
+    expect(described_class).to include Puppet::Util::PTomulik::Package::Ports::PkgSearch
   end
 end

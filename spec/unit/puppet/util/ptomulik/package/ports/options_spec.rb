@@ -18,12 +18,12 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         context "#[#{key.inspect}]=#{val.inspect}" do
           let(:val) { val }
           let(:munged_val) { munged_val }
-          it{ expect { subject[key] = val }.to_not raise_error }
+          specify { expect { subject[key] = val }.to_not raise_error }
           context "the returned value" do
-            it{ (subject[key] = val).should == val }
+            specify { expect((subject[key] = val)).to eq val }
           end
           context "and then #[#{munged_key.inspect}]" do
-            it{ subject[key] = val; subject[munged_key].should == munged_val }
+            specify { subject[key] = val; expect(subject[munged_key]).to eq munged_val }
           end
         end
       end
@@ -36,7 +36,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         let(:val) { true }
         let(:err) { Puppet::Util::PTomulik::Vash::InvalidKeyError }
         let(:msg) { "invalid option name #{key.inspect}" }
-        it { expect { subject[key] = val }.to raise_error err, msg }
+        specify { expect { subject[key] = val }.to raise_error err, msg }
       end
     end
 
@@ -47,7 +47,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         let(:val) { val }
         let(:err) { Puppet::Util::PTomulik::Vash::InvalidValueError }
         let(:msg) { "invalid value #{val.inspect} for option #{key}" }
-        it { expect { subject[key] = val }.to raise_error err, msg }
+        specify { expect { subject[key] = val }.to raise_error err, msg }
       end
     end
   end
@@ -66,8 +66,8 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
       context "#parse(#{str.inspect})" do
         let(:str)  { str }
         let(:hash) { hash }
-        it { expect { described_class.parse(str) }.to_not raise_error }
-        it { described_class.parse(str).should == hash }
+        specify { expect { described_class.parse(str) }.to_not raise_error }
+        specify { expect(described_class.parse(str)).to eq hash }
       end
     end
     ['www_apache22', 'lang_perl5.14'].each do |subdir|
@@ -78,9 +78,9 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         context "#parse(File.read(#{file.inspect}))" do
           let(:options_string) { File.read(file) }
           let(:options_hash)   { YAML.load_file(yaml) }
-          it { expect { described_class.parse(options_string) }.to_not raise_error }
-          it "should return same options as loaded from #{yaml.inspect}" do
-            described_class.parse(options_string).should == options_hash
+          specify { expect { described_class.parse(options_string) }.to_not raise_error }
+          specify "should return same options as loaded from #{yaml.inspect}" do
+            expect(described_class.parse(options_string)).to eq options_hash
           end
         end
       end
@@ -97,20 +97,20 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         context "#load(#{file.inspect})" do
           let(:file) { file }
           let(:options_hash) { YAML.load_file(yaml) }
-          it { expect { described_class.load(file) }.to_not raise_error }
-          it "should return same options as loaded from #{yaml.inspect}" do
-            described_class.load(file).should == options_hash
+          specify { expect { described_class.load(file) }.to_not raise_error }
+          specify "should return same options as loaded from #{yaml.inspect}" do
+            expect(described_class.load(file)).to eq options_hash
           end
         end
       end
     end
     context "#load('inexistent.file')" do
-      it { expect { described_class.load('intexistent.file') }.to_not raise_error}
-      it { described_class.load('inexistent.file').should == Hash.new }
+      specify { expect { described_class.load('intexistent.file') }.to_not raise_error}
+      specify { expect(described_class.load('inexistent.file')).to eq Hash.new }
     end
     context "#load('inexistent.file', :all => true)" do
       # NOTE: not sure if this doesn't break specs on non-POSIX OSes
-      it { expect { described_class.load('intexistent.file', :all => true) }.
+      specify { expect { described_class.load('intexistent.file', :all => true) }.
            to raise_error Errno::ENOENT, /No such file or directory/i }
     end
 
@@ -120,32 +120,32 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
   describe "#query_pkgng(key,packages=nil,params={})" do
     context "#query_pkgng('%o',nil)" do
       let(:cmd) { ['pkg', 'query', "'%o %Ok %Ov'"] }
-      it do
+      specify do
         Puppet::Util::Execution.stubs(:execpipe).once.with(cmd).yields([
           "origin/foo FOO on",
           "origin/foo BAR off",
           "origin/bar FOO off",
           "origin/bar BAR on"
         ].join("\n"))
-        described_class.query_pkgng('%o',nil).should == {
+        expect(described_class.query_pkgng('%o',nil)).to eq({
           'origin/foo' => described_class[{ :FOO => true, :BAR => false }],
           'origin/bar' => described_class[{ :FOO => false, :BAR => true }]
-        }
+        })
       end
     end
     context "#query_pkgng('%o',['foo','bar'])" do
       let(:cmd) { ['pkg', 'query', "'%o %Ok %Ov'", 'foo', 'bar'] }
-      it do
+      specify do
         Puppet::Util::Execution.stubs(:execpipe).once.with(cmd).yields([
           "origin/foo FOO on",
           "origin/foo BAR off",
           "origin/bar FOO off",
           "origin/bar BAR on"
         ].join("\n"))
-        described_class.query_pkgng('%o',['foo','bar']).should == {
+        expect(described_class.query_pkgng('%o',['foo','bar'])).to eq({
           'origin/foo' => described_class[{ :FOO => true, :BAR => false }],
           'origin/bar' => described_class[{ :FOO => false, :BAR => true }]
-        }
+        })
       end
     end
   end
@@ -180,7 +180,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         let(:params) { params }
         let(:result) { result }
         subject { obj }
-        it { subject.generate(params).should == result}
+        specify { expect(subject.generate(params)).to eq result}
       end
     end
   end
@@ -198,13 +198,13 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
           Dir.expects(:mkdir).never
           FileUtils.expects(:mkdir_p).never
         end
-        it do
+        specify do
           File.stubs(:write)
           expect { subject.save("#{dir}/options") }.to_not raise_error
         end
-        it "should call File.write('#{dir}/options',#{str.inspect}) once" do
+        specify "should call File.write('#{dir}/options',#{str.inspect}) once" do
           File.expects(:write).once.with("#{dir}/options", str).returns 6
-          subject.save("#{dir}/options").should == 6
+          expect(subject.save("#{dir}/options")).to eq 6
         end
       end
       context "#save('#{dir}/options', :pkgname => 'foo-1.2.3')" do
@@ -217,11 +217,11 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
           Dir.expects(:mkdir).never
           FileUtils.expects(:mkdir_p).never
         end
-        it do
+        specify do
           File.stubs(:write)
           expect { subject.save("#{dir}/options", :pkgname => 'foo-1.2.3') }.to_not raise_error
         end
-        it "should call File.write('#{dir}/options',#{str2.inspect}) once" do
+        specify "should call File.write('#{dir}/options',#{str2.inspect}) once" do
           File.expects(:write).once.with("#{dir}/options", str2)
           subject.save("#{dir}/options", :pkgname => 'foo-1.2.3')
         end
@@ -233,12 +233,12 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
           File.stubs(:exists?).with(dir).returns false
           FileUtils.expects(:mkdir_p).never
         end
-        it do
+        specify do
           Dir.stubs(:mkdir)
           File.stubs(:write)
           expect { subject.save("#{dir}/options") }.to_not raise_error
         end
-        it "should call Dir.mkdir('#{dir}') and " +
+        specify "should call Dir.mkdir('#{dir}') and " +
            "then File.write('#{dir}',#{str.inspect})" do
           save_seq = sequence('save_seq')
           Dir.stubs(:mkdir).once.with(dir).in_sequence(save_seq)
@@ -253,12 +253,12 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
           File.stubs(:exists?).with(dir).returns false
           Dir.expects(:mkdir).never
         end
-        it { expect {
+        specify { expect {
           FileUtils.stubs(:mkdir_p)
           File.stubs(:write)
           subject.save("#{dir}/options", :mkdir_p => true)
         }.to_not raise_error }
-        it "should call FileUtils.mkdir_p('#{dir}') and " +
+        specify "should call FileUtils.mkdir_p('#{dir}') and " +
            "then File.write('#{dir}',#{str.inspect})" do
           save_seq = sequence('save_seq')
           FileUtils.stubs(:mkdir_p).once.with(dir).in_sequence(save_seq)
