@@ -8,7 +8,7 @@ ROOT=$(readlink -f "$(dirname $0)/..")
 SOURCE="."
 TARGET=`mktemp -d`
 
-function do_build_module {
+do_build_module() {
   tag=$1
   tgz="$TARGET/ptomulik-portsutil-${tag}.tar.gz"
   dir="ptomulik-portsutil-$tag/"
