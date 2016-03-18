@@ -198,7 +198,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
     ].each do |str|
       context "#portorigin?(#{str.inspect})" do
         let(:str) { str }
-        it { test_class.portorigin?(str).should be_true }
+        it { test_class.portorigin?(str).should be_truthy }
       end
     end
     [
@@ -213,7 +213,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       context "#portorigin?(#{str.inspect})" do
         let(:str) { str }
         it { expect { test_class.portorigin?(str) }.to_not raise_error }
-        it { test_class.portorigin?(str).should be_false }
+        it { test_class.portorigin?(str).should be_falsey }
       end
     end
   end
@@ -233,7 +233,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
     ].each do |str|
       context "#pkgname?(#{str.inspect})" do
         let(:str) { str }
-        it { test_class.pkgname?(str).should be_true }
+        it { test_class.pkgname?(str).should be_truthy }
       end
     end
     [
@@ -247,7 +247,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       context "#pkgname?(#{str.inspect})" do
         let(:str) { str }
         it { expect { test_class.pkgname?(str) }.to_not raise_error }
-        it { test_class.pkgname?(str).should be_false }
+        it { test_class.pkgname?(str).should be_falsey }
       end
     end
   end
@@ -267,7 +267,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
     ].each do |str|
       context "#portname?(#{str.inspect})" do
         let(:str) { str }
-        it { test_class.portname?(str).should be_true }
+        it { test_class.portname?(str).should be_truthy }
       end
     end
     [
@@ -281,7 +281,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       context "#portname?(#{str.inspect})" do
         let(:str) { str }
         it { expect { test_class.portname?(str) }.to_not raise_error }
-        it { test_class.portname?(str).should be_false }
+        it { test_class.portname?(str).should be_falsey }
       end
     end
   end
@@ -344,7 +344,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       end
       it "@pkgng_active should be false after pkgng_active?" do
         test_class.pkgng_active?({:pkg => pkg})
-        test_class.instance_variable_get(:@pkgng_active).should be_false
+        test_class.instance_variable_get(:@pkgng_active).should be_falsey
       end
     end
     context "when pkg command exists but pkgng database is not initialized" do
@@ -364,7 +364,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       end
       it "@pkgng_active should be false after pkgng_active?" do
         test_class.pkgng_active?({:pkg => pkg})
-        test_class.instance_variable_get(:@pkgng_active).should be_false
+        test_class.instance_variable_get(:@pkgng_active).should be_falsey
       end
     end
     context "when pkg command exists and pkgng database is initialized" do
@@ -384,7 +384,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       end
       it "@pkgng_active should be true after pkgng_active?" do
         test_class.pkgng_active?({:pkg => pkg})
-        test_class.instance_variable_get(:@pkgng_active).should be_true
+        test_class.instance_variable_get(:@pkgng_active).should be_truthy
       end
     end
   end
