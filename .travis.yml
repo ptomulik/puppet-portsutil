@@ -11,9 +11,6 @@ rvm:
   - 2.0.0
     #  - ruby-head
 script: "bundle exec rake spec SPEC_OPTS='--format documentation'"
-branches:
-  only:
-    master
 env:
   matrix:
     - PUPPET_GEM_VERSION="~> 2.7.0"
