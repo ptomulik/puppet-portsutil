@@ -144,7 +144,7 @@ module Functions
   #   command and not a ruby regexp (it's a string in fact).
   # @param s [String|Enumerable] a string or an array of strings to be
   #   converted to a search pattern
-  # @return [String] the resultant search pattern 
+  # @return [String] the resultant search pattern
   #
   def strings_to_pattern(s)
     if s.is_a?(Enumerable) and not s.instance_of?(String)
@@ -261,7 +261,7 @@ module Functions
   # files that may potentially contain build options for the port. The returned
   # names are in same order as they are read by ports Makefile's. The last file
   # overrides values defined in all previous file, so  it's most significant.
-  # 
+  #
   # @param portname [String] the *portname* of a port,
   # @param portorigin [String] the *portorigin* for a port
   # @return [Array] an array of absolute paths to option files.
@@ -278,7 +278,7 @@ module Functions
   end
 
   # Check whether the pkgng is used by operating system.
-  # 
+  #
   # This method uses technique proposed by `pkg(8)` man page to detect whether
   # the [pkgng](https://wiki.freebsd.org/pkgng) database is used by local OS.
   # The man page says:
@@ -302,7 +302,7 @@ module Functions
   #   [pkg](http://www.freebsd.org/doc/handbook/pkgng-intro.html) command
   # @option options [String] :execpipe handle to a method which executes
   #   external commands in same way as puppet's `execpipe` does, , if not given,
-  #   the Puppet::Util::Execution#execpipe is used. 
+  #   the Puppet::Util::Execution#execpipe is used.
   # @return [Boolean] `true` if the pkgng is active or `false` otherwise.
   #
   def pkgng_active?(options = {})
@@ -315,7 +315,7 @@ module Functions
       ::Puppet.debug "'#{pkg}' command found, checking whether pkgng is active"
       env = { 'TMPDIR' => '/dev/null', 'ASSUME_ALWAYS_YES' => '1',
               'PACKAGESITE' => 'file:///nonexistent' }
-      Puppet::Util.withenv(env) do 
+      Puppet::Util.withenv(env) do
         begin
           # this is technique proposed by pkg(8) man page,
           cmd = [pkg,'info','-x',"'pkg(-devel)?$'",'>/dev/null', '2>&1']

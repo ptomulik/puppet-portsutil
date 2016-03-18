@@ -33,7 +33,7 @@ module Puppet::Util::PTomulik::Package::Ports
   # Options can be loaded from FreeBSD port options files or extracted from a
   # string. They may be further converted to a string or saved to a file. The
   # class provides following methods for that:
-  # 
+  #
   # - {load} - load options from files,
   # - {parse} - extract options from a string,
   # - {#generate} - store options to a string,
@@ -77,7 +77,7 @@ module Puppet::Util::PTomulik::Package::Ports
     #
     # @param value [String|Symbol|Boolean] input value to be munged,
     # @return [Boolean] `true` if the `value` is `true`, `:on`, or `on`;
-    #   otherwise `false` 
+    #   otherwise `false`
     #
     def self.munge_option_value(value)
       case value
@@ -89,7 +89,7 @@ module Puppet::Util::PTomulik::Package::Ports
     # --
     # Overriden methods from Vash::Contained
     # ++
-    
+
     # Required by Vash to have key validation in place.
     def vash_valid_key?(x);     self.class.option_name?(x);          end
     # Required by Vash to have value validation in place.
@@ -147,9 +147,9 @@ module Puppet::Util::PTomulik::Package::Ports
 
     self::PKG_ARGS_MAX = 60
 
-    # Query pkgng for package options. 
+    # Query pkgng for package options.
     #
-    # This method executes 
+    # This method executes
     #
     #     pkg query "#{key} %Ok %Ov" ...
     #
@@ -158,7 +158,7 @@ module Puppet::Util::PTomulik::Package::Ports
     #
     # @param key [String] determines what will be used as keys in the returned
     #   hash; example values are `'%n'` - return *pkgnames* in keys, `'%o'`
-    #   return *pkgorigins* in keys, 
+    #   return *pkgorigins* in keys,
     # @param packages [Array] list of packages to be queried; if not given,
     #   query all the installed packages,
     # @param params [Hash] additional parameters to alter method's behavior,

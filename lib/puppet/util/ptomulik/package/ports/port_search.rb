@@ -227,7 +227,7 @@ module PortSearch
   # Yields paragraphs of the input.
   #
   # Paragraps are portions of __input__ text separated by empty lines.
-  # 
+  #
   # @param input [String] input string to be split into paragraphs,
   # @yield [String] paragraphs extracted from __input__.
   def each_paragraph_of(input)

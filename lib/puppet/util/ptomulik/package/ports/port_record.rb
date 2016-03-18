@@ -121,7 +121,7 @@ class PortRecord < ::Puppet::Util::PTomulik::Package::Ports::Record
   # ---
   # FN - Field Name, FV - Field Value, FX - Field (composed)
   # +++
-  
+
   # Regular expression to match field names in paragraphs returned by `make
   # search` command.
   self::FN_RE = /[a-zA-Z0-9_-]+/

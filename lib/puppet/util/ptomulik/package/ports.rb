@@ -34,7 +34,7 @@ require 'puppet/util/ptomulik/package/ports/pkg_search'
 #
 # Searches are customizable. You may, for example, specify what fields should
 # be included in search results (in records).
-# 
+#
 # You may search ports INDEX by *pkgname*, *portname*, by *portorigin*, or
 # (with a little extra effort) perform a custom search by any key supported by
 # the *make search* command (see
@@ -42,14 +42,14 @@ require 'puppet/util/ptomulik/package/ports/pkg_search'
 # may also perform a heuristic search *by name* without stating whether the
 # *name* represents *pkgname*, *portname* or *portorigin*  (see
 # {#search_ports}).
-# 
+#
 # Installed packages may be searched by *name* (the list of names is passed
 # directly
 # [portversion(1)](http://www.freebsd.org/cgi/man.cgi?query=portversion&manpath=ports&sektion=1)).
 # It's also easy to retrieve information about __all__ installed packages.
 #
 # ### Ports' build options
-# 
+#
 # When compiling FreeBSD ports, the user has possibility to set some build
 # options with *make config* command. Here, the same build options may be
 # easily manipulated with {Options} class. The {Options} object represents
@@ -59,17 +59,17 @@ require 'puppet/util/ptomulik/package/ports/pkg_search'
 # */var/db/ports/*.
 #
 # ### FreeBSD ports collection and its terminology
-# 
+#
 # Ports and packages in FreeBSD may be identified by either *portnames*,
 # *pkgnames* or *portorigins*. We use the following terminology when referring
 # ports/packages:
-# 
+#
 #   * a string in form `'apache22'` or `'ruby'` is referred to as *portname*
 #   * a string in form `'apache22-2.2.25'` or `'ruby-1.8.7.371,1'` is referred to
 #     as a *pkgname*
 #   * a string in form `'www/apache22'` or `'lang/ruby18'` is referred to as a
 #     port *origin* or *portorigin*
-# 
+#
 # See [http://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html](http://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html)
 #
 module Puppet::Util::PTomulik::Package::Ports
