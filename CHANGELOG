@@ -1,6 +1,7 @@
 2016-03-18 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * release 0.0.5
   * correct projects www address in Modulefile
-  * release 0.04
+  * release 0.0.4
   * run tests on travis-ci on more versions of ruby and puppet
   * adjust tests to run smoothly on rspec 3.x
   * cleaned up code
