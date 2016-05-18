@@ -10,5 +10,8 @@
   "description": "Puppet extension module for searching FreeBSD ports, packages, and manipulating ports build options",
   "dependencies": [
     {"name":"ptomulik/vash","version_requirement":">= 0.1.6"}
+  ],
+  "operatingsystem_support" : [
+    { "operatingsystem" : "FreeBSD" }
   ]
 }
