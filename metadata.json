@@ -1,0 +1,14 @@
+{
+  "name": "ptomulik-portsutil",
+  "version": "0.0.6",
+  "author": "ptomulik",
+  "summary": "Utility module for FreeBSD ports",
+  "license": "Apache License, Version 2.0",
+  "source": "git://github.com/ptomulik/puppet-portsutil.git",
+  "project_page": "https://github.com/ptomulik/puppet-portsutil",
+  "issues_url": "https://github.com/ptomulik/puppet-portsutil/issues",
+  "description": "Puppet extension module for searching FreeBSD ports, packages, and manipulating ports build options",
+  "dependencies": [
+    {"name":"ptomulik/vash","version_requirement":">= 0.1.6"}
+  ]
+}
