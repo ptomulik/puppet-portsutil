@@ -22,12 +22,18 @@ This library contains extension modules for searching FreeBSD
 [ports(7)](http://www.freebsd.org/cgi/man.cgi?query=ports&sektion=7) and
 packages. It uses `make search` command to search available ports and
 [portversion(1)](http://www.freebsd.org/cgi/man.cgi?query=portversion&manpath=ports&sektion=1)
-to query already installed packages. Both, the old
-[pkg](http://www.freebsd.org/doc/handbook/packages-using.html) and the new
-[pkgng](http://www.freebsd.org/doc/handbook/pkgng-intro.html) databases are
-supported. The library also allows manipulating build options (normally set
-with `make config`) and determining other characteristics of FreeBSD packaging
-system.
+to query already installed packages. The `portversion` is a part of the
+`port-maintenance-tools` package, which may be installed with
+
+```console
+pkg install port-maintenance-tools
+```
+
+Both, the old [pkg](http://www.freebsd.org/doc/handbook/packages-using.html)
+and the new [pkgng](http://www.freebsd.org/doc/handbook/pkgng-intro.html)
+databases are supported. The library also allows manipulating build options
+(normally set with `make config`) and determining other characteristics of
+FreeBSD packaging system.
 
 The library is developed primarily for
 [ptomulik-portsng](https://github.com/ptomulik/puppet-portsng)
