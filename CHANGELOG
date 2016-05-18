@@ -1,4 +1,8 @@
 2016-05-19 Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+  * release 0.0.7
+  * removed deprecated Modulefile
+  * Vagrantfile: provision freebsd with ports initialized
+  * correct .gitignore to be properly handled by "puppet module build"
   * release 0.0.6
   * added Vagrantfile to simplify manual testing on FreeBSD VMs
   * added metadata.json to allow new features of forge.puppetlabs.com
