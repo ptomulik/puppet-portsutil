@@ -22,3 +22,14 @@
 The generated documentation goes to `doc/` directory. Note that this works only
 under ruby >= 1.9.
 
+### Using vagrant to test some bits manually
+
+    vagrant up freebsd-10.2
+    vagrant ssh freebsd-10.2
+
+The actual versions of supported OSes may vary. Please consult `Vagrantfile`.
+
+The project's directory gets copied to `/vagrant` directory of the virtual
+machine. The virtual machines created by vagrant may be further deleted with
+
+    vagrant destroy

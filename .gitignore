@@ -27,3 +27,5 @@ spec/lib
 .yardoc/
 doc/
 coverage/
+# Vagrant
+.vagrant/
