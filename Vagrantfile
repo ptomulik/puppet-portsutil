@@ -45,6 +45,8 @@ Vagrant.configure(2) do |config|
     pkg install -y port-maintenance-tools
     pkg install -y rubygem-bundler
     pkg install -y git
+    test -x /usr/bin && portsnap --interactive fetch update  # order is
+    test -x /usr/bin || portsnap --interactive fetch extract # important!!!
   SHELL
 
   config.vm.provider :virtualbox do |vb, override|
