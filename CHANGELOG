@@ -1,4 +1,5 @@
 2016-05-19 Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+  * release 0.0.9 [created because 0.0.8 is deleted on forge.puppetlabs.com]
   * release 0.0.8
   * fixed path to ports in Vagrantfile
   * release 0.0.7
