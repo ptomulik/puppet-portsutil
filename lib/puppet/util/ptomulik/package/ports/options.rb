@@ -245,7 +245,7 @@ module Puppet::Util::PTomulik::Package::Ports
         "Saving options for '#{params[:pkgname]}' port to file '#{file}'" :
         "Saving port options to file '#{file}'"
       respond_to?(:debug) ? debug(msg) : Puppet.debug(msg)
-      File.write(file,generate(params))
+      File.open(file, 'w') { |f| f.write(generate(params)) }
     end
 
   end

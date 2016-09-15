@@ -11,14 +11,17 @@ task :default do
 end
 
 if RUBY_VERSION >= "1.9"
-  # Generating API documentation, run with 'rake yard'
-  require 'yard'
-  YARD::Rake::YardocTask.new do |t|
-    t.options =  [
-      '--title', 'PortsUtil',
-      '--markup-provider=redcarpet',
-      '--markup=markdown',
-      'lib/**/*.rb'
-    ]
+  begin
+    # Generating API documentation, run with 'rake yard'
+    require 'yard'
+    YARD::Rake::YardocTask.new do |t|
+      t.options =  [
+        '--title', 'PortsUtil',
+        '--markup-provider=redcarpet',
+        '--markup=markdown',
+        'lib/**/*.rb'
+      ]
+    end
+  rescue LoadError
   end
 end

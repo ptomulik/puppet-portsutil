@@ -199,11 +199,13 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
           FileUtils.expects(:mkdir_p).never
         end
         specify do
-          File.stubs(:write)
+          File.stubs(:open)
           expect { subject.save("#{dir}/options") }.to_not raise_error
         end
-        specify "should call File.write('#{dir}/options',#{str.inspect}) once" do
-          File.expects(:write).once.with("#{dir}/options", str).returns 6
+        specify "should call File.open('#{dir}/options','w') { |f| f.write(#{str.inspect}) } once" do
+          testobj = Class.new { }
+          testobj.expects(:write).once.with(str)
+          File.expects(:open).once.with("#{dir}/options", 'w').yields(testobj).then.returns(6)
           expect(subject.save("#{dir}/options")).to eq 6
         end
       end
@@ -218,12 +220,14 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
           FileUtils.expects(:mkdir_p).never
         end
         specify do
-          File.stubs(:write)
+          File.stubs(:open)
           expect { subject.save("#{dir}/options", :pkgname => 'foo-1.2.3') }.to_not raise_error
         end
-        specify "should call File.write('#{dir}/options',#{str2.inspect}) once" do
-          File.expects(:write).once.with("#{dir}/options", str2)
-          subject.save("#{dir}/options", :pkgname => 'foo-1.2.3')
+        specify "should call File.open('#{dir}/options','w') { |f| f.write(#{str2.inspect}) } once" do
+          testobj = Class.new { }
+          testobj.expects(:write).once.with(str2)
+          File.expects(:open).once.with("#{dir}/options", 'w').yields(testobj).then.returns(9)
+          expect(subject.save("#{dir}/options", :pkgname => 'foo-1.2.3')).to eq 9
         end
       end
     end
@@ -235,15 +239,17 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         end
         specify do
           Dir.stubs(:mkdir)
-          File.stubs(:write)
+          File.stubs(:open)
           expect { subject.save("#{dir}/options") }.to_not raise_error
         end
         specify "should call Dir.mkdir('#{dir}') and " +
-           "then File.write('#{dir}',#{str.inspect})" do
+           "then File.open('#{dir}','w') { |f| f.write(#{str.inspect}) }" do
           save_seq = sequence('save_seq')
+          testobj = Class.new { }
           Dir.stubs(:mkdir).once.with(dir).in_sequence(save_seq)
-          File.stubs(:write).once.with("#{dir}/options",str).in_sequence(save_seq)
-          subject.save("#{dir}/options")
+          File.stubs(:open).once.with("#{dir}/options",'w').in_sequence(save_seq).yields(testobj).then.returns(12)
+          testobj.expects(:write).once.with(str).in_sequence(save_seq)
+          expect(subject.save("#{dir}/options")).to eq 12
         end
       end
     end
@@ -255,15 +261,17 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
         end
         specify { expect {
           FileUtils.stubs(:mkdir_p)
-          File.stubs(:write)
+          File.stubs(:open)
           subject.save("#{dir}/options", :mkdir_p => true)
         }.to_not raise_error }
         specify "should call FileUtils.mkdir_p('#{dir}') and " +
            "then File.write('#{dir}',#{str.inspect})" do
           save_seq = sequence('save_seq')
+          testobj = Class.new { }
           FileUtils.stubs(:mkdir_p).once.with(dir).in_sequence(save_seq)
-          File.stubs(:write).once.with("#{dir}/options",str).in_sequence(save_seq)
-          subject.save("#{dir}/options", :mkdir_p => true)
+          File.stubs(:open).once.with("#{dir}/options",'w').in_sequence(save_seq).yields(testobj).then.returns(15)
+          testobj.expects(:write).once.with(str).in_sequence(save_seq)
+          expect(subject.save("#{dir}/options", :mkdir_p => true)).to eq 15
         end
       end
     end
