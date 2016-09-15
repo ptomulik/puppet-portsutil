@@ -12,6 +12,9 @@ module PortSearch
   require 'puppet/util/ptomulik/package/ports/port_record'
   include Functions
 
+  require 'puppet/util/ptomulik/package/ports/execution'
+  include Execution
+
   # Search ports by name.
   #
   # This method performs `search_ports_by(:portorigin, ...)` for `names`
@@ -187,9 +190,8 @@ module PortSearch
   # @yield [PortRecord] records extracted from the output of make search
   #   command.
   def do_execute_make_search(key, pattern, fields, options)
-    execpipe = options[:execpipe] || Puppet::Util::Execution.method(:execpipe)
     cmd = make_search_command(key, pattern, fields, options)
-    execpipe.call(cmd) do |process|
+    execute_command(cmd, options) do |process|
       each_paragraph_of(process) do |paragraph|
         if record = PortRecord.parse(paragraph, options)
           yield record

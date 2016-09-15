@@ -412,7 +412,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
           record_class = Puppet::Util::PTomulik::Package::Ports::PortRecord
           search_fields = record_class.determine_search_fields(fields,key)
           cmd = test_class.make_search_command(key, pattern,search_fields,{})
-          Puppet::Util::Execution.stubs(:execpipe).with(cmd).yields(output)
+          cmd_str = cmd.join(' ')
+          Puppet::Util::Execution.stubs(:execpipe).with(cmd_str).yields(output)
           expect { |b|
             test_class.execute_make_search(key,pattern,fields,&b)
           }.to yield_successive_args(*result)

@@ -121,7 +121,8 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
     context "#query_pkgng('%o',nil)" do
       let(:cmd) { ['pkg', 'query', "'%o %Ok %Ov'"] }
       specify do
-        Puppet::Util::Execution.stubs(:execpipe).once.with(cmd).yields([
+        cmd_str = cmd.join(' ')
+        Puppet::Util::Execution.stubs(:execpipe).once.with(cmd_str).yields([
           "origin/foo FOO on",
           "origin/foo BAR off",
           "origin/bar FOO off",
@@ -136,7 +137,8 @@ describe Puppet::Util::PTomulik::Package::Ports::Options do
     context "#query_pkgng('%o',['foo','bar'])" do
       let(:cmd) { ['pkg', 'query', "'%o %Ok %Ov'", 'foo', 'bar'] }
       specify do
-        Puppet::Util::Execution.stubs(:execpipe).once.with(cmd).yields([
+        cmd_str = cmd.join(' ')
+        Puppet::Util::Execution.stubs(:execpipe).once.with(cmd_str).yields([
           "origin/foo FOO on",
           "origin/foo BAR off",
           "origin/bar FOO off",

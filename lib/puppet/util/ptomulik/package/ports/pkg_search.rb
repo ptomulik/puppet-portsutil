@@ -11,6 +11,9 @@ module PkgSearch
   require 'puppet/util/ptomulik/package/ports/pkg_record'
   include Functions
 
+  require 'puppet/util/ptomulik/package/ports/execution'
+  include Execution
+
   # Search installed packages
   #
   # **Usage example 1**:
@@ -175,9 +178,8 @@ module PkgSearch
 
   def execute_portversion(args, options = {})
     key_check = determine_portversion_key_check(args)
-    execpipe = options[:execpipe] || Puppet::Util::Execution.method(:execpipe)
     cmd = portversion_command(args, options)
-    execpipe.call(cmd) do |process|
+    execute_command(cmd, options) do |process|
       process.each_line do |line|
         fields = line.strip.split(/\s+/,3)
         # portversion sometimes puts garbage to its output; we skip such lines

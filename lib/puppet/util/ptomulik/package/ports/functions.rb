@@ -319,7 +319,12 @@ module Functions
         begin
           # this is technique proposed by pkg(8) man page,
           cmd = [pkg,'info','-x',"'pkg(-devel)?$'",'>/dev/null', '2>&1']
-          execpipe = options[:execpipe] || Puppet::Util::Execution.method(:execpipe)
+          begin
+            execpipe = options[:execpipe] ||
+                       Puppet::Util::Execution.method(:execpipe)
+          rescue NameError
+            execpipe = Puppet::Util.method(:execpipe)
+          end
           execpipe.call(cmd) { |pipe| pipe.each_line {} } # just ignore
           @pkgng_active = true
         rescue Puppet::ExecutionFailure

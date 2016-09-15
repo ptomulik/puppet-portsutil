@@ -45,6 +45,10 @@ module Puppet::Util::PTomulik::Package::Ports
     require 'puppet/util/ptomulik/vash/contained'
     include Puppet::Util::PTomulik::Vash::Contained
 
+    require 'puppet/util/ptomulik/package/ports/execution'
+    extend Execution
+    private_class_method :execute_command
+
     # Is x valid as option name?
     #
     # @param x an input value to be checked
@@ -186,9 +190,8 @@ module Puppet::Util::PTomulik::Package::Ports
     def self.query_pkgng_1(key,slice,params)
       pkg = params[:pkg] || 'pkg'
       cmd = [pkg, 'query', "'#{key} %Ok %Ov'"] + slice
-      execpipe = params[:execpipe] || Puppet::Util::Execution.method(:execpipe)
       options = {}
-      execpipe.call(cmd) do |pipe|
+      execute_command(cmd, params) do |pipe|
         pipe.each_line do |line|
           origin, option, value = line.strip.split
           options[origin] ||= new

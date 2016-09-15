@@ -331,7 +331,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
         end
         specify do
           cmds.each do |cmd,output|
-            Puppet::Util::Execution.stubs(:execpipe).with(cmd).yields(output)
+            cmd_str = cmd.join(' ')
+            Puppet::Util::Execution.stubs(:execpipe).with(cmd_str).yields(output)
           end
           expect { |b|
             test_class.portversion_search(names,args,&b)
@@ -413,8 +414,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
         let(:output) { output }
         let(:result) { result }
         specify do
-          Puppet::Util::Execution.stubs(:execpipe).with(cmd).
-            multiple_yields(*output)
+          cmd_str = cmd.join(' ')
+          Puppet::Util::Execution.stubs(:execpipe).with(cmd_str).multiple_yields(*output)
           expect { |b|
             test_class.execute_portversion(args,options,&b)
           }.to yield_successive_args(*result)
