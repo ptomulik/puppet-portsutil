@@ -2,7 +2,7 @@ require 'puppet/util/ptomulik/package'
 require 'fileutils'
 
 module Puppet::Util::PTomulik::Package::Ports
-  # Maintain FreeBSD ports options  (normally settable with `make search`).
+  # Maintain FreeBSD ports options  (normally settable with `make config`).
   #
   # This is just a hash with simple validation and few additional methods for
   # loading, parsing and saving ports options to a file.
