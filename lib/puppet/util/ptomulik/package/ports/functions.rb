@@ -296,13 +296,13 @@ module Functions
   # Determine default syntax used for options
   #
   # @return [Symbol]
-  #   - `:with`, if default syntax is `WITH_XXX=true|false`, or
+  #   - `:with_without`, if default syntax is `WITH_XXX=true|false`, or
   #   - `:set_unset`, if default syntax is `OPTION_FILE_[UN]SET+=XXX`.
   #
   def options_files_default_syntax()
     # TODO: I'm not sure about this test, the FreeBSD ports options are so
     #       undocummented...
-    File.exist?(portsdir('Mk/bsd.options.mk')) ? :set_unset : :with
+    File.exist?(portsdir('Mk/bsd.options.mk')) ? :set_unset : :with_without
   end
 
   # Check whether the pkgng is used by operating system.

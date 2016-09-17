@@ -373,7 +373,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       before(:each) do
         File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(false)
       end
-      specify { expect(test_class.options_files_default_syntax()).to eql :with }
+      specify { expect(test_class.options_files_default_syntax()).to eql :with_without }
     end
   end
 
