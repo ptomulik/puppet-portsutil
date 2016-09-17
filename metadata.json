@@ -1,6 +1,6 @@
 {
   "name": "ptomulik-portsutil",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "author": "ptomulik",
   "summary": "Utility module for FreeBSD ports",
   "license": "Apache License, Version 2.0",
