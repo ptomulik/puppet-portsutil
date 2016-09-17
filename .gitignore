@@ -8,8 +8,8 @@ spec/fixtures/*
 spec/fixtures/unit/*
 !spec/fixtures/unit/puppet/
 spec/fixtures/unit/puppet/*
-!spec/fixtures/unit/puppet/util/ptomulik/
-spec/fixtures/unit/puppet/util/ptomulik/*
+!spec/fixtures/unit/puppet/util/
+spec/fixtures/unit/puppet/util/*
 !spec/fixtures/unit/puppet/util/ptomulik/
 spec/fixtures/unit/puppet/util/ptomulik/*
 !spec/fixtures/unit/puppet/util/ptomulik/package/

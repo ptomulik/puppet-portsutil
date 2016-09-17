@@ -121,8 +121,12 @@ module Puppet::Util::PTomulik::Package::Ports
     # @return [Puppet::Util::PTomulik::Package::Ports::Options] new instance
     #   of Options.
     def self.parse(string)
-      opt_re = /^\s*OPTIONS_FILE_((?:UN)?SET)\s*\+=(\w+)\s*$/
-      Options[ string.scan(opt_re).map{|pair| [pair[1], pair[0]=='SET']} ]
+      re1 = /OPTIONS_FILE_((?:UN)?SET)\s*\+=\s*(\w+)/
+      re2 = /WITH_(\w+)\s*=\s*(\w+)/
+      opt_re = /^\s*(?:#{re1})|(?:#{re2})\s*$/
+      Options[string.scan(opt_re).map { |m|
+        (m[2] && m[3]) ? [m[2], m[3] == 'true'] : [m[1], m[0]=='SET']
+      } ]
     end
 
     # Read options from options files. Missing files from __files__ list are
@@ -208,6 +212,9 @@ module Puppet::Util::PTomulik::Package::Ports
     # @param params [Hash] hash of parameters to alter method's behavior
     # @option params :pkgname [String] package name to which the options apply,
     #   by convention it should be a *pkgname* of the given package.
+    # @option params :syntax [Symbol] choose syntax:
+    #   - `:with` - variables are written in form `WITH_XXX=true|false`
+    #   - `:set_unset` - variables are written in form `OPTIONS_FILE_[UN]SET+=XXX`
     # @return [String] the generated content as string.
     #
     def generate(params)
@@ -216,10 +223,12 @@ module Puppet::Util::PTomulik::Package::Ports
         content += "# Options for #{params[:pkgname]}\n"
         content += "_OPTIONS_READ=#{params[:pkgname]}\n"
       end
-      keys.sort.each do |k|
-        v = self[k]
-        content += "OPTIONS_FILE_#{v ? '':'UN'}SET+=#{k}\n"
-      end
+      genvar = if params[:syntax] == :with
+                 lambda { |k,v| "WITH_#{k}=#{v ? 'true' : 'false'}\n" }
+               else
+                 lambda { |k,v| "OPTIONS_FILE_#{v ? '':'UN'}SET+=#{k}\n" }
+               end
+      keys.sort.each { |k| content += genvar.call(k, self[k]) }
       content
     end
 
@@ -233,6 +242,7 @@ module Puppet::Util::PTomulik::Package::Ports
     # @option params :mkdir_p [Boolean] create directories recursively if they
     #   don't exist; if `false`, only last level subdirectory is allowed to be
     #   created.
+    # @option params :syntax [Symbol] see #generate
     # @note by default we do not allow to create directories recursivelly;
     #       we assume, that '/var/db/ports' already exists and user saves
     #       its options to '/var/db/ports/my_port/options';
@@ -250,6 +260,5 @@ module Puppet::Util::PTomulik::Package::Ports
       respond_to?(:debug) ? debug(msg) : Puppet.debug(msg)
       File.open(file, 'w') { |f| f.write(generate(params)) }
     end
-
   end
 end

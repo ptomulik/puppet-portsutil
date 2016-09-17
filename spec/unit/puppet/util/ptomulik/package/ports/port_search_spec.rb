@@ -21,6 +21,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
     end
   end
 
+  PortRecord = Puppet::Util::PTomulik::Package::Ports::PortRecord
+
   version_pattern = '[a-zA-Z0-9][a-zA-Z0-9\\.,_]*'
 
   specify { expect(test_class).to be_a Puppet::Util::PTomulik::Package::Ports::Functions }
@@ -408,15 +410,17 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
         let(:fields) { fields }
         let(:output) { output }
         let(:result) { result }
-        specify do
-          record_class = Puppet::Util::PTomulik::Package::Ports::PortRecord
-          search_fields = record_class.determine_search_fields(fields,key)
+        let(:search_fields) { PortRecord.determine_search_fields(fields,key) }
+        before(:each) do
           cmd = test_class.make_search_command(key, pattern,search_fields,{})
           cmd_str = cmd.join(' ')
           Puppet::Util::Execution.stubs(:execpipe).with(cmd_str).yields(output)
-          expect { |b|
-            test_class.execute_make_search(key,pattern,fields,&b)
-          }.to yield_successive_args(*result)
+          result.collect { |r| r[:portorigin] }.each do |portorigin|
+            PortRecord.stubs(:options_files_portorigin).with(portorigin).returns(portorigin)
+          end
+        end
+        specify do
+          expect { |b| test_class.execute_make_search(key,pattern,fields,&b) }.to yield_successive_args(*result)
         end
       end
     end

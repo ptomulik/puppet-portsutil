@@ -37,8 +37,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['rubygem-facter-1.6.18_2', 'sysutils/rubygem-facter', '<', 'needs updating (port has 1.7.3_1)']
         ],
         [
-          PkgRecord[ {:pkgname => 'apache22-2.2.26', :portstatus => '=', :portinfo => 'up-to-date with ports'} ],
-          PkgRecord[ {:pkgname => 'rubygem-facter-1.6.18_2', :portstatus => '<', :portinfo => 'needs updating (port has 1.7.3_1)'} ]
+          {:pkgname => 'apache22-2.2.26', :portstatus => '=', :portinfo => 'up-to-date with ports'},
+          {:pkgname => 'rubygem-facter-1.6.18_2', :portstatus => '<', :portinfo => 'needs updating (port has 1.7.3_1)'}
         ]
       ],
       # 2.
@@ -49,8 +49,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['rubygem-facter-1.6.18_2', 'sysutils/rubygem-facter', '<', 'needs updating (port has 1.7.3_1)']
         ],
         [
-          PkgRecord[ {:portorigin => 'www/apache22', :portstatus => '=', :portinfo => 'up-to-date with ports'} ],
-          PkgRecord[ {:portorigin => 'sysutils/rubygem-facter', :portstatus => '<', :portinfo => 'needs updating (port has 1.7.3_1)'} ]
+          {:portorigin => 'www/apache22', :portstatus => '=', :portinfo => 'up-to-date with ports'},
+          {:portorigin => 'sysutils/rubygem-facter', :portstatus => '<', :portinfo => 'needs updating (port has 1.7.3_1)'}
         ]
       ],
       # 3.
@@ -61,8 +61,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['rubygem-facter-1.6.18_2', 'sysutils/rubygem-facter', '<', 'needs updating (port has 1.7.3_1)']
         ],
         [
-          PkgRecord[ {:portorigin => 'www/apache22', :pkgname => 'apache22-2.2.26'} ],
-          PkgRecord[ {:portorigin => 'sysutils/rubygem-facter', :pkgname => 'rubygem-facter-1.6.18_2' }]
+          {:portorigin => 'www/apache22', :pkgname => 'apache22-2.2.26'},
+          {:portorigin => 'sysutils/rubygem-facter', :pkgname => 'rubygem-facter-1.6.18_2' }
         ]
       ],
       # 4.
@@ -72,7 +72,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['apache22-2.2.26', 'www/apache22', "=", "up-to-date with ports"]
         ],
         [
-          ['apache22', PkgRecord[ {:pkgname => 'apache22-2.2.26'}]]
+          ['apache22', {:pkgname => 'apache22-2.2.26'}]
         ]
       ],
       # 5.
@@ -83,8 +83,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['rubygem-facter-1.6.18_2', 'sysutils/rubygem-facter', '<', 'needs updating (port has 1.7.3_1)']
         ],
         [
-          ['apache22', PkgRecord[ {:portorigin => 'www/apache22'}]],
-          ['sysutils/rubygem-facter', PkgRecord[ {:portorigin => 'sysutils/rubygem-facter'}]],
+          ['apache22', {:portorigin => 'www/apache22'}],
+          ['sysutils/rubygem-facter', {:portorigin => 'sysutils/rubygem-facter'}],
         ]
       ],
       # 6. (note the argument order w.r.t 5.)
@@ -95,8 +95,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['rubygem-facter-1.6.18_2', 'sysutils/rubygem-facter', '<', 'needs updating (port has 1.7.3_1)']
         ],
         [
-          ['apache22', PkgRecord[ {:portorigin => 'www/apache22'}]],
-          ['sysutils/rubygem-facter', PkgRecord[ {:portorigin => 'sysutils/rubygem-facter'}]],
+          ['apache22', {:portorigin => 'www/apache22'}],
+          ['sysutils/rubygem-facter', {:portorigin => 'sysutils/rubygem-facter'}],
         ]
       ],
       # 7.
@@ -107,8 +107,8 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           ['rubygem-facter-1.6.18_2', 'sysutils/rubygem-facter', '<', 'needs updating (port has 1.7.3_1)']
         ],
         [
-          ['apache22', PkgRecord[ {:pkgname => 'apache22-2.2.26', :portorigin => 'www/apache22'}]],
-          ['sysutils/rubygem-facter', PkgRecord[ {:pkgname => 'rubygem-facter-1.6.18_2', :portorigin => 'sysutils/rubygem-facter'}]],
+          ['apache22', {:pkgname => 'apache22-2.2.26', :portorigin => 'www/apache22'}],
+          ['sysutils/rubygem-facter', {:pkgname => 'rubygem-facter-1.6.18_2', :portorigin => 'sysutils/rubygem-facter'}],
         ]
       ],
       # 8.
@@ -121,7 +121,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
         [
           [
             'ruby',
-            PkgRecord[{
+            { # PkgRecord
               :portorigin => 'lang/ruby18',
               :options_files => [
                 '/var/db/ports/ruby/options',
@@ -130,11 +130,11 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
                 '/var/db/ports/lang_ruby18/options.local',
               ],
               :options_file => '/var/db/ports/lang_ruby18/options.local'
-            }]
+            }
           ],
           [
             'ruby',
-            PkgRecord[{
+            { # PkgRecord
               :portorigin => 'lang/ruby19',
               :options_files => [
                 '/var/db/ports/ruby/options',
@@ -143,29 +143,32 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
                 '/var/db/ports/lang_ruby19/options.local',
               ],
               :options_file => '/var/db/ports/lang_ruby19/options.local'
-            }]
+            }
           ],
         ]
       ],
     ].each do |names,fields,options,output,result|
       context "#search_packages(#{names.inspect},#{fields.inspect},#{options.inspect})" do
         let(:names) { names }
+        let(:fields) { fields }
+        let(:options) { options }
+        let(:output) { output }
         let(:out1) { output.collect { |o| [[o[0]] + o[2..3]] } }
         let(:out2) { output.collect { |o| [o[1..3]] } }
         let(:out3) { output.collect { |o| [[o[1]]] } }
         let(:result) { result }
-        specify {
-          args = names  ? test_class.sort_names_for_portversion(names) : []
-          test_class.stubs(:execute_portversion).with(%w{-v -F} + args, options).
-            multiple_yields(*out1)
-          test_class.stubs(:execute_portversion).with(%w{-v -o} + args, options).
-            multiple_yields(*out2)
-          test_class.stubs(:execute_portversion).with(%w{-Q -o} + args, options).
-            multiple_yields(*out3)
-          expect { |b|
-            test_class.search_packages(names,fields,options,&b)
-          }.to yield_successive_args(*result)
-        }
+        before(:each) do
+          args = names ? test_class.sort_names_for_portversion(names) : []
+          test_class.stubs(:execute_portversion).with(%w{-v -F} + args, options).multiple_yields(*out1)
+          test_class.stubs(:execute_portversion).with(%w{-v -o} + args, options).multiple_yields(*out2)
+          test_class.stubs(:execute_portversion).with(%w{-Q -o} + args, options).multiple_yields(*out3)
+          output.collect { |out| out[1] }.each do |portorigin|
+            PkgRecord.stubs(:options_files_portorigin).with(portorigin).returns(portorigin)
+          end
+        end
+        specify do
+          expect { |b| test_class.search_packages(names,fields,options,&b) }.to yield_successive_args(*result)
+        end
       end
     end
   end

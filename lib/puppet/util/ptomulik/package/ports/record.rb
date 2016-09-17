@@ -122,7 +122,10 @@ class Record < ::Hash
     end
     if self[:portname] and self[:portorigin]
       if_wants_one_of(fields,[:options_files,:options_file,:options]) do
-        self[:options_files] = self.class.options_files(self[:portname],self[:portorigin])
+        self[:options_files] = self.class.options_files(
+          self[:portname],
+          self.class.options_files_portorigin(self[:portorigin])
+        )
         if_wants(fields,:options_file) do
           self[:options_file] = self[:options_files].last
         end

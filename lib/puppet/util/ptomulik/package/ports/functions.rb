@@ -227,26 +227,30 @@ module Functions
 
   # Path to BSD ports source tree.
   # @note you may set `ENV['PORTSDIR']` to override defaults.
+  # @param path [String] optional subpath to be appended to the portsdir
   # @return [String] `/usr/pkgsrc` on NetBSD, `/usr/ports` on other systems or
-  #   the value defined by `ENV['PORTSDIR']`.
+  #   the value defined by `ENV['PORTSDIR']`; if *path* is given, then it's
+  #   appended to the value specified above
   #
-  def portsdir
+  def portsdir(path = nil)
     unless dir = ENV['PORTSDIR']
       os = Facter.value(:operatingsystem)
       dir = (os == "NetBSD") ? '/usr/pkgsrc' : '/usr/ports'
     end
-    dir
+    path ? File.join(dir, path) : dir
   end
 
   # Path to ports DB directory, defaults to `/var/db/ports`.
   # @note You may set `ENV['PORT_DBDIR']` to override defaults.
-  # @return [String] `/var/db/ports`, or the value defined by `ENV['PORT_DBDIR'].
+  # @param path [String] optional subpath to be appended to the port_dbdir
+  # @return [String] `/var/db/ports`, or the value defined by `ENV['PORT_DBDIR'];
+  #   if *path* is given, then it's appended to the value specified above
   #
-  def port_dbdir
+  def port_dbdir(path = nil)
     unless dir = ENV['PORT_DBDIR']
       dir = '/var/db/ports'
     end
-    dir
+    path ? File.join(dir, path) : dir
   end
 
   # Return standard names of option files for a port.
@@ -266,15 +270,39 @@ module Functions
   # @param portorigin [String] the *portorigin* for a port
   # @return [Array] an array of absolute paths to option files.
   #
-  def options_files(portname, portorigin)
-      [
-        # keep these in proper order, see /usr/ports/Mk/bsd.options.mk
-        portname,                  # OPTIONSFILE,
-        portorigin.gsub(/\//,'_'), # OPTIONS_FILE,
-      ].flatten.map{|x|
+  def options_files(portname, portorigin = nil)
+      # keep sources in proper order, see /usr/ports/Mk/bsd.options.mk
+      sources = [ portname ]                              # OPTIONSFILE,
+      sources << portorigin.gsub(/\//,'_') if portorigin  # OPTIONS_FILE,
+      sources.flatten.map{|x|
         f = File.join(self.port_dbdir,x,"options")
         [f,"#{f}.local"]
       }.flatten
+  end
+
+  # Prepare the *portorigin* argument for the `options_files` method.
+  #
+  # If the installed ports support options file with names in form
+  # '/var/db/ports/port_origin/options[.local]' then the function returns the
+  # provided *portorigin* value. Otherwise, it returns `nil`.
+  #
+  # @param portorigin [Strong] portorigin to be used
+  # @return [String|nil]
+  #
+  def options_files_portorigin(portorigin)
+    File.exist?(portsdir('Mk/bsd.options.mk')) ? portorigin : nil
+  end
+
+  # Determine default syntax used for options
+  #
+  # @return [Symbol]
+  #   - `:with`, if default syntax is `WITH_XXX=true|false`, or
+  #   - `:set_unset`, if default syntax is `OPTION_FILE_[UN]SET+=XXX`.
+  #
+  def options_files_default_syntax()
+    # TODO: I'm not sure about this test, the FreeBSD ports options are so
+    #       undocummented...
+    File.exist?(portsdir('Mk/bsd.options.mk')) ? :set_unset : :with
   end
 
   # Check whether the pkgng is used by operating system.

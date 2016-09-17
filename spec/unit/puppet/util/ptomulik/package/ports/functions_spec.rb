@@ -155,24 +155,28 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
           Facter.stubs(:value).with(:operatingsystem).returns('FreeBSD')
         end
         specify { expect(test_class.portsdir).to eq '/usr/ports' }
+        specify { expect(test_class.portsdir('foo/bar')).to eq '/usr/ports/foo/bar' }
       end
       context "on OpenBSD" do
         before(:each) do
           Facter.stubs(:value).with(:operatingsystem).returns('OpenBSD')
         end
         specify { expect(test_class.portsdir).to eq '/usr/ports' }
+        specify { expect(test_class.portsdir('foo/bar')).to eq '/usr/ports/foo/bar' }
       end
       context "on NetBSD" do
         before(:each) do
           Facter.stubs(:value).with(:operatingsystem).returns('NetBSD')
         end
         specify { expect(test_class.portsdir).to eq '/usr/pkgsrc' }
+        specify { expect(test_class.portsdir('foo/bar')).to eq '/usr/pkgsrc/foo/bar' }
       end
     end
     context "with ENV['PORTSDIR'] == #{dir.inspect}" do
       let(:dir) { dir }
       before(:each) { ENV.stubs(:[]).with('PORTSDIR').returns(dir) }
       specify { expect(test_class.portsdir).to eq dir }
+      specify { expect(test_class.portsdir('foo/bar')).to eq File.join(dir, 'foo/bar') }
     end
   end
 
@@ -180,11 +184,13 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
     dir = '/some/dir'
     context "with ENV['PORT_DBDIR'] unset" do
       specify { expect(test_class.port_dbdir).to eq '/var/db/ports' }
+      specify { expect(test_class.port_dbdir('foo/bar')).to eq '/var/db/ports/foo/bar' }
     end
     context "with ENV['PORT_DBDIR'] == #{dir.inspect}" do
       before(:each) { ENV.stubs(:[]).with('PORT_DBDIR').returns(dir) }
       let(:dir) { dir }
       specify { expect(test_class.port_dbdir).to eq dir }
+      specify { expect(test_class.port_dbdir('foo/bar')).to eq File.join(dir, 'foo/bar') }
     end
   end
 
@@ -305,7 +311,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
     end
   end
 
-  describe "#options_files(portname,portorigin)" do
+  describe "#options_files(portname, portorigin)" do
     [
       [
         'ruby', 'lang/ruby19',
@@ -315,6 +321,13 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
           '/var/db/ports/lang_ruby19/options',
           '/var/db/ports/lang_ruby19/options.local'
         ]
+      ],
+      [
+        'figlet', nil,
+        [
+          '/var/db/ports/figlet/options',
+          '/var/db/ports/figlet/options.local',
+        ]
       ]
     ].each do |portname,portorigin,result|
       context "#options_files(#{portname.inspect},#{portorigin.inspect})" do
@@ -322,6 +335,45 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
           expect(test_class.options_files(portname,portorigin)).to eq result
         end
       end
+    end
+  end
+
+  describe '#options_files("foobar")' do
+    specify do
+      expect(test_class.options_files('foobar')).to eq [
+        '/var/db/ports/foobar/options',
+        '/var/db/ports/foobar/options.local'
+      ]
+    end
+  end
+
+  describe '#options_files_portorigin("foo/bar")' do
+    context 'when there is no /usr/ports/Mk/bsd.options.mk' do
+      before(:each) do
+        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(true)
+      end
+      specify { expect(test_class.options_files_portorigin('foo/bar')).to eq 'foo/bar' }
+    end
+    context 'when there is /usr/ports/Mk/bsd.options.mk' do
+      before(:each) do
+        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(false)
+      end
+      specify { expect(test_class.options_files_portorigin('foo/bar')).to be_nil }
+    end
+  end
+
+  describe '#options_files_default_syntax()' do
+    context 'when there is no /usr/ports/Mk/bsd.options.mk' do
+      before(:each) do
+        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(true)
+      end
+      specify { expect(test_class.options_files_default_syntax()).to eql :set_unset }
+    end
+    context 'when there is /usr/ports/Mk/bsd.options.mk' do
+      before(:each) do
+        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(false)
+      end
+      specify { expect(test_class.options_files_default_syntax()).to eql :with }
     end
   end
 
@@ -388,5 +440,4 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
       end
     end
   end
-
 end

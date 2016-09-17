@@ -100,6 +100,9 @@ describe Puppet::Util::PTomulik::Package::Ports::Record do
         context "#amend!(#{fields.inspect})" do
           let(:fields) { fields }
           let(:result) { result }
+          before(:each) do
+            described_class.stubs(:options_files_portorigin).with('foo/bar22').returns('foo/bar22')
+          end
           specify "changes self to #{result.inspect}" do
             if fields.include?(:options)
               Puppet::Util::PTomulik::Package::Ports::Options.stubs(:load).
@@ -109,6 +112,8 @@ describe Puppet::Util::PTomulik::Package::Ports::Record do
                   '/var/db/ports/foo_bar22/options',
                   '/var/db/ports/foo_bar22/options.local'
                 ]).returns('loaded from /var/db/ports/foo_bar22/options.local')
+              described_class.stubs(:options_files_portorigin).
+                once.with('foo/bar22').returns 'foo/bar22'
             end
             s = subject
             s.amend!(fields)
