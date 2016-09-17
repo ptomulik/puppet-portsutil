@@ -122,10 +122,10 @@ module Puppet::Util::PTomulik::Package::Ports
     #   of Options.
     def self.parse(string)
       re1 = /OPTIONS_FILE_((?:UN)?SET)\s*\+=\s*(\w+)/
-      re2 = /WITH_(\w+)\s*=\s*(\w+)/
+      re2 = /(WITH(?:OUT)?)_(\w+)\s*=.*/
       opt_re = /^\s*(?:#{re1})|(?:#{re2})\s*$/
       Options[string.scan(opt_re).map { |m|
-        (m[2] && m[3]) ? [m[2], m[3] == 'true'] : [m[1], m[0]=='SET']
+        (m[2] && m[3]) ? [m[3], m[2] == 'WITH'] : [m[1], m[0]=='SET']
       } ]
     end
 
@@ -213,7 +213,7 @@ module Puppet::Util::PTomulik::Package::Ports
     # @option params :pkgname [String] package name to which the options apply,
     #   by convention it should be a *pkgname* of the given package.
     # @option params :syntax [Symbol] choose syntax:
-    #   - `:with` - variables are written in form `WITH_XXX=true|false`
+    #   - `:with_without` - variables are written in form `WITH_XXX=true|false`
     #   - `:set_unset` - variables are written in form `OPTIONS_FILE_[UN]SET+=XXX`
     # @return [String] the generated content as string.
     #
@@ -223,8 +223,8 @@ module Puppet::Util::PTomulik::Package::Ports
         content += "# Options for #{params[:pkgname]}\n"
         content += "_OPTIONS_READ=#{params[:pkgname]}\n"
       end
-      genvar = if params[:syntax] == :with
-                 lambda { |k,v| "WITH_#{k}=#{v ? 'true' : 'false'}\n" }
+      genvar = if params[:syntax] == :with_without
+                 lambda { |k,v| "WITH#{ v ? '' : 'OUT'}_#{k}=true\n" }
                else
                  lambda { |k,v| "OPTIONS_FILE_#{v ? '':'UN'}SET+=#{k}\n" }
                end
