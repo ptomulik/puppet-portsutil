@@ -15,6 +15,10 @@
 
     bundle exec rake spec
 
+### Building module
+
+    bundle exec rake build
+
 ### Generating API documentation
 
     bundle exec rake yard
