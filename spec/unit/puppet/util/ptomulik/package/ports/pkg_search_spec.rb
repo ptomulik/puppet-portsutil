@@ -162,6 +162,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PkgSearch do
           test_class.stubs(:execute_portversion).with(%w{-v -F} + args, options).multiple_yields(*out1)
           test_class.stubs(:execute_portversion).with(%w{-v -o} + args, options).multiple_yields(*out2)
           test_class.stubs(:execute_portversion).with(%w{-Q -o} + args, options).multiple_yields(*out3)
+          PkgRecord.stubs(:options_local_supported?).returns(true)
           output.collect { |out| out[1] }.each do |portorigin|
             PkgRecord.stubs(:options_files_portorigin).with(portorigin).returns(portorigin)
           end

@@ -311,7 +311,7 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
     end
   end
 
-  describe "#options_files(portname, portorigin)" do
+  describe "#options_files" do
     [
       [
         'ruby', 'lang/ruby19',
@@ -336,42 +336,81 @@ describe Puppet::Util::PTomulik::Package::Ports::Functions do
         end
       end
     end
+    context '#options_files("foobar",nil)' do
+      specify do
+        expect(test_class.options_files('foobar',nil)).to eq [
+          '/var/db/ports/foobar/options',
+          '/var/db/ports/foobar/options.local'
+        ]
+      end
+    end
+    context '#options_files("foobar",nil,false)' do
+      specify do
+        expect(test_class.options_files('foobar',nil,false)).to eq [
+          '/var/db/ports/foobar/options'
+        ]
+      end
+    end
+    context '#options_files("foobar","geez/foobar",false)' do
+      specify do
+        expect(test_class.options_files('foobar','geez/foobar',false)).to eq [
+          '/var/db/ports/foobar/options',
+          '/var/db/ports/geez_foobar/options'
+        ]
+      end
+    end
+    context '#options_files("foobar")' do
+      specify do
+        expect(test_class.options_files('foobar')).to eq [
+          '/var/db/ports/foobar/options',
+          '/var/db/ports/foobar/options.local'
+        ]
+      end
+    end
   end
 
-  describe '#options_files("foobar")' do
-    specify do
-      expect(test_class.options_files('foobar')).to eq [
-        '/var/db/ports/foobar/options',
-        '/var/db/ports/foobar/options.local'
-      ]
+  describe '#bsd_options_mk?' do
+    context 'when there is portsdir("Mk/bsd.options.mk")' do
+      before(:each) do
+        test_class.stubs(:portsdir).once.with('Mk/bsd.options.mk').returns('/opt/ports/Mk/bsd.options.mk')
+        File.stubs(:exist?).once.with('/opt/ports/Mk/bsd.options.mk').returns(true)
+      end
+      specify { expect(test_class.bsd_options_mk?).to be true }
+    end
+    context 'when there is no portsdir("Mk/bsd.options.mk")' do
+      before(:each) do
+        test_class.stubs(:portsdir).once.with('Mk/bsd.options.mk').returns('/opt/ports/Mk/bsd.options.mk')
+        File.stubs(:exist?).once.with('/opt/ports/Mk/bsd.options.mk').returns(false)
+      end
+      specify { expect(test_class.bsd_options_mk?).to be false }
     end
   end
 
   describe '#options_files_portorigin("foo/bar")' do
-    context 'when there is no /usr/ports/Mk/bsd.options.mk' do
+    context 'when there is Mk/bsd.options.mk' do
       before(:each) do
-        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(true)
+        test_class.stubs(:bsd_options_mk?).returns(true)
       end
       specify { expect(test_class.options_files_portorigin('foo/bar')).to eq 'foo/bar' }
     end
-    context 'when there is /usr/ports/Mk/bsd.options.mk' do
+    context 'when there is no Mk/bsd.options.mk' do
       before(:each) do
-        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(false)
+        test_class.stubs(:bsd_options_mk?).returns(false)
       end
       specify { expect(test_class.options_files_portorigin('foo/bar')).to be_nil }
     end
   end
 
   describe '#options_files_default_syntax()' do
-    context 'when there is no /usr/ports/Mk/bsd.options.mk' do
+    context 'when there is Mk/bsd.options.mk' do
       before(:each) do
-        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(true)
+        test_class.stubs(:bsd_options_mk?).returns(true)
       end
       specify { expect(test_class.options_files_default_syntax()).to eql :set_unset }
     end
-    context 'when there is /usr/ports/Mk/bsd.options.mk' do
+    context 'when there is no Mk/bsd.options.mk' do
       before(:each) do
-        File.stubs(:exist?).with('/usr/ports/Mk/bsd.options.mk').returns(false)
+        test_class.stubs(:bsd_options_mk?).returns(false)
       end
       specify { expect(test_class.options_files_default_syntax()).to eql :with_without }
     end

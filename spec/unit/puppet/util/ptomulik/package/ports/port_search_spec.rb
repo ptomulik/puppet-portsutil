@@ -415,6 +415,7 @@ describe Puppet::Util::PTomulik::Package::Ports::PortSearch do
           cmd = test_class.make_search_command(key, pattern,search_fields,{})
           cmd_str = cmd.join(' ')
           Puppet::Util::Execution.stubs(:execpipe).with(cmd_str).yields(output)
+          PortRecord.stubs(:options_local_supported?).returns(true)
           result.collect { |r| r[:portorigin] }.each do |portorigin|
             PortRecord.stubs(:options_files_portorigin).with(portorigin).returns(portorigin)
           end

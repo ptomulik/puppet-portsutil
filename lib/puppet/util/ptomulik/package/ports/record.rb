@@ -124,7 +124,8 @@ class Record < ::Hash
       if_wants_one_of(fields,[:options_files,:options_file,:options]) do
         self[:options_files] = self.class.options_files(
           self[:portname],
-          self.class.options_files_portorigin(self[:portorigin])
+          self.class.options_files_portorigin(self[:portorigin]),
+          self.class.options_local_supported?
         )
         if_wants(fields,:options_file) do
           self[:options_file] = self[:options_files].last

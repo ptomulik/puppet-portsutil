@@ -101,9 +101,10 @@ describe Puppet::Util::PTomulik::Package::Ports::Record do
           let(:fields) { fields }
           let(:result) { result }
           before(:each) do
-            described_class.stubs(:options_files_portorigin).with('foo/bar22').returns('foo/bar22')
-          end
-          specify "changes self to #{result.inspect}" do
+            if fields.include?(:options_files) || fields.include?(:options_file)
+              described_class.stubs(:options_files_portorigin).once.with('foo/bar22').returns('foo/bar22')
+              described_class.stubs(:options_local_supported?).once.returns(true)
+            end
             if fields.include?(:options)
               Puppet::Util::PTomulik::Package::Ports::Options.stubs(:load).
                 once.with([
@@ -112,16 +113,16 @@ describe Puppet::Util::PTomulik::Package::Ports::Record do
                   '/var/db/ports/foo_bar22/options',
                   '/var/db/ports/foo_bar22/options.local'
                 ]).returns('loaded from /var/db/ports/foo_bar22/options.local')
-              described_class.stubs(:options_files_portorigin).
-                once.with('foo/bar22').returns 'foo/bar22'
+              described_class.expects(:options_files_portorigin).once.with('foo/bar22').returns 'foo/bar22'
+              described_class.stubs(:options_local_supported?).once.returns(true)
             end
-            s = subject
-            s.amend!(fields)
-            expect(s).to eq result
+          end
+          specify "changes self to #{result.inspect}" do
+            subject.amend!(fields)
+            expect(subject).to eq result
           end
         end
       end
     end
   end
 end
-

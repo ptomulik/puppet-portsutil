@@ -268,16 +268,32 @@ module Functions
   #
   # @param portname [String] the *portname* of a port,
   # @param portorigin [String] the *portorigin* for a port
+  # @param local [Boolean] whether to take "options.local" files into account
   # @return [Array] an array of absolute paths to option files.
   #
-  def options_files(portname, portorigin = nil)
+  def options_files(portname, portorigin = nil, local = true)
       # keep sources in proper order, see /usr/ports/Mk/bsd.options.mk
       sources = [ portname ]                              # OPTIONSFILE,
       sources << portorigin.gsub(/\//,'_') if portorigin  # OPTIONS_FILE,
       sources.flatten.map{|x|
         f = File.join(self.port_dbdir,x,"options")
-        [f,"#{f}.local"]
+        local ? [f,"#{f}.local"] : f
       }.flatten
+  end
+
+  # Determine, whether our ports tree uses new options framework.
+  #
+  # The new options framework was introduced on 2012-05-28 and is implemented
+  # mostly in the Mk/bsd.options.mk file.
+  #
+  # @return [Boolean] `true` if new options framework is available
+  #
+  def bsd_options_mk?()
+    # Memoize the response to reduce number of calls to File.exist?
+    path = portsdir('Mk/bsd.options.mk')
+    @bsd_options_mk ||= {}
+    @bsd_options_mk[path] = File.exist?(path) if @bsd_options_mk[path].nil?
+    @bsd_options_mk[path]
   end
 
   # Prepare the *portorigin* argument for the `options_files` method.
@@ -290,7 +306,7 @@ module Functions
   # @return [String|nil]
   #
   def options_files_portorigin(portorigin)
-    File.exist?(portsdir('Mk/bsd.options.mk')) ? portorigin : nil
+    portorigin if bsd_options_mk?
   end
 
   # Determine default syntax used for options
@@ -300,9 +316,20 @@ module Functions
   #   - `:set_unset`, if default syntax is `OPTION_FILE_[UN]SET+=XXX`.
   #
   def options_files_default_syntax()
-    # This is quite reliable test, the new syntax appeared on 2012-05-28
-    # together with the new Mk/bsd.options.mk file.
-    File.exist?(portsdir('Mk/bsd.options.mk')) ? :set_unset : :with_without
+    bsd_options_mk? ? :set_unset : :with_without
+  end
+
+  # Determine whether the ports implementation handles correctly options.local
+  # files.
+  #
+  # From what I've seen, the old implementation of options (before introduction
+  # of Mk/bsd.options.mk file didn't handle options stored in "options.local"
+  # files. These options were (probably) used when compiling, but "make
+  # showconfig" and "make config" were simply ignoring them.
+  #
+  # @return [Boolean] `true` if "options.local" files are supported.
+  def options_local_supported?()
+    bsd_options_mk?
   end
 
   # Check whether the pkgng is used by operating system.
