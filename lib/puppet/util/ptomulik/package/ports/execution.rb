@@ -29,6 +29,7 @@ module Execution
     end
     @execpipe_method
   end
+  module_function :execpipe_method
   private :execpipe_method
 
   # Invoke `Puppet::Util::Execution.execpipe` or `Puppet::Util.execpipe`
@@ -38,6 +39,7 @@ module Execution
     command_str = command.respond_to?(:join) ? command.join(' ') : command
     execpipe_method.call(command_str, *args) { |pipe| yield pipe }
   end
+  module_function :execpipe
 
   # Execute command via execpipe
   #
@@ -54,6 +56,6 @@ module Execution
     args << options[:failonfail] if options.include?(:failonfail)
     executor.call(*args) { |pipe| yield pipe }
   end
-  #module_function :execute_command
+  module_function :execute_command
 end
 end

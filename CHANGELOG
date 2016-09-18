@@ -1,4 +1,5 @@
 2016-09-18 Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+  * converted execpipe and execute_command to module_functions
   * removed .scripts directory
 2016-09-17 Paweł Tomulik <ptomulik@meil.pw.edu.pl>
   * release 0.1.2

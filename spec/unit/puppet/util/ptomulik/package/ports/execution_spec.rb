@@ -28,6 +28,10 @@ describe Puppet::Util::PTomulik::Package::Ports::Execution do
     Puppet::Util::Execution.stubs(:method).with(:execpipe).raises NameError
   end
 
+  # Ensure that appropriate module_function directives are there
+  specify { expect(described_class).to respond_to :execpipe }
+  specify { expect(described_class).to respond_to :execute_command }
+
   describe "execute_command" do
     [Puppet::Util::Execution, Puppet::Util].each do |mod|
       context "with #{mod}.execpipe" do
@@ -35,10 +39,18 @@ describe Puppet::Util::PTomulik::Package::Ports::Execution do
         before :each do
           mod.stubs(:method).with(:execpipe).returns test_execpipe.method(:execpipe)
         end
+        # It works in a test_class that receives the module
         specify do
           y = nil
           test_execpipe.expects(:execpipe).once.with(:foo).invoke
-          expect(test_class.execute_command(:foo) { |x| y = x }).to be :output
+          expect(test_class.send(:execute_command,:foo) { |x| y = x }).to be :output
+          expect(y).to be :pipe
+        end
+        # It also works in the Execution module as a module_function...
+        specify do
+          y = nil
+          test_execpipe.expects(:execpipe).once.with(:foo).invoke
+          expect(described_class.execute_command(:foo) { |x| y = x }).to be :output
           expect(y).to be :pipe
         end
       end
