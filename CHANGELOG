@@ -1,4 +1,5 @@
 2016-09-18 Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+  * release 0.1.3
   * added workarounds for options.local files not being handled by old ports
   * converted execpipe and execute_command to module_functions
   * removed .scripts directory
